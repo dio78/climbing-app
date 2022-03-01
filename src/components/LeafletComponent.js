@@ -576,7 +576,7 @@ const LeafletComponent = () => {
   // } 
 
   return (
-    <MapContainer center={polylineReal[0]} zoom={12}>
+    <MapContainer center={polylineReal[0]} zoom={12} className="mx-auto">
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
