@@ -1,6 +1,7 @@
 import { MapContainer, TileLayer, Marker, Popup, Polyline, useMapEvents } from "react-leaflet";
 import { useState } from "react";
 import '../Leaflet.css'
+import { Col, Container, Row } from "react-bootstrap";
 
 const LeafletComponent = () => {
 
@@ -576,37 +577,6 @@ const LeafletComponent = () => {
   //   polyline.push([input['lon'], input['lat']])
   // }
 
-  const [marker, setMarker] = useState({
-    markers: [[51.505, -0.09]]
-  });
-
-  const handleMapClick = (e) => {
-    this.addMarker();
-  }
-
-  const addMarker = (e) => {
-    const {markers} = marker;
-    markers.push(e.latLon)
-  }
-
-  function LocationMarker() {
-    const [position, setPosition] = useState(null)
-    const map = useMapEvents({
-      click() {
-        map.locate()
-      },
-      locationfound(e) {
-        setPosition(e.latlng)
-        map.flyTo(e.latlng, map.getZoom())
-      },
-    })
-  
-    return position === null ? null : (
-      <Marker position={position}>
-        <Popup>You are here</Popup>
-      </Marker>
-    )
-  }
 
   function LocationMarker1() {
     const [position, setPosition] = useState(null)
@@ -627,24 +597,33 @@ const LeafletComponent = () => {
   
   
   return (
-    <MapContainer center={polylineReal[0]} zoom={12} className="mx-auto">
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      <Marker position={polylineReal[0]}>
-        <Popup>
-          A pretty CSS3 popup. <br /> Easily customizable.
-        </Popup>
-      </Marker>
-      <Marker position={polylineReal[polylineReal.length - 1]}>
-        <Popup>
-          A pretty CSS3 popup. <br /> Easily customizable.
-        </Popup>
-      </Marker>
-      <Polyline pathOptions={{color: 'red'}} positions={polylineReal} />
-      <LocationMarker1 />
-    </MapContainer>
+
+    <Container className="mb-4">
+      <Row>
+        <Col>
+          <div>Click a location on the map to set a marker</div>
+        </Col>
+      </Row>
+    
+      <MapContainer center={polylineReal[0]} zoom={12} className="mx-auto">
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <Marker position={polylineReal[0]}>
+          <Popup>
+            A pretty CSS3 popup. <br /> Easily customizable.
+          </Popup>
+        </Marker>
+        <Marker position={polylineReal[polylineReal.length - 1]}>
+          <Popup>
+            A pretty CSS3 popup. <br /> Easily customizable.
+          </Popup>
+        </Marker>
+        <Polyline pathOptions={{color: 'red'}} positions={polylineReal} />
+        <LocationMarker1 />
+      </MapContainer>
+    </Container>
   )
 };
 

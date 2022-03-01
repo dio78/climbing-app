@@ -21,23 +21,54 @@ const CityInput = () => {
         </Col>
       </Row>
 
-      <Form className="mb-4">
-        <Row>
-          <Col xs={{span: '8', offset: '2' }}>
-            <Row className="align-items-center">
-              <Col xs={8}>
-                <Form.Control placeholder="City" />
-              </Col>
+      <h4 className="mb-4">Or</h4>
+      
+      <Row className="mb-4">
+        <Col xs={{span: '8', offset: '2' }}>
+          <Form >
+          <Row className="align-items-center">
+            <Col xs={8}>
+              <Form.Control placeholder="City" />
+            </Col>
+            <Col>
+              <Form.Control placeholder="State" />
+            </Col>
+            <Col xs="auto">
+              <Button xs="auto">Search</Button>
+            </Col>
+          </Row>
+          </Form>
+        </Col>
+      </Row>
+      
+      <h4 className="mb-4">Or</h4>
+
+      <Row>
+        <Col xs={{span: '8', offset: '2' }}>
+          <Form onSubmit={handleSubmit}>
+            <Row>
               <Col>
-                <Form.Control placeholder="State" />
-              </Col>
-              <Col xs="auto">
-                <Button xs="auto">Search</Button>
+                <InputGroup className="mb-2">
+                  <Button type="submit" variant="outline-secondary">Current Location</Button>
+                  <FormControl placeholder="Enter start location"></FormControl>
+                </InputGroup>
               </Col>
             </Row>
-          </Col>
-        </Row>
-      </Form>
+            <Row className="mb-2">
+              <Col>
+                  <FormControl placeholder="Enter Destination Location"></FormControl>
+              </Col>
+            </Row>
+            <Row className="mb-4">
+              <Col className="align-items-center">
+                  <Button type="submit">Submit</Button>
+              </Col>
+            </Row>
+            
+          </Form>
+        </Col>
+      </Row>
+      
     </Container>
   )
 }
