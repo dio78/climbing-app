@@ -1,4 +1,5 @@
-import { MapContainer, TileLayer, Marker, Popup, Polyline } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, Polyline, useMapEvents } from "react-leaflet";
+import { useState } from "react";
 import '../Leaflet.css'
 
 const LeafletComponent = () => {
@@ -573,8 +574,58 @@ const LeafletComponent = () => {
   // for (let i = 0; i < inputData.length; i++) {
   //   const input = inputData[i];
   //   polyline.push([input['lon'], input['lat']])
-  // } 
+  // }
 
+  const [marker, setMarker] = useState({
+    markers: [[51.505, -0.09]]
+  });
+
+  const handleMapClick = (e) => {
+    this.addMarker();
+  }
+
+  const addMarker = (e) => {
+    const {markers} = marker;
+    markers.push(e.latLon)
+  }
+
+  function LocationMarker() {
+    const [position, setPosition] = useState(null)
+    const map = useMapEvents({
+      click() {
+        map.locate()
+      },
+      locationfound(e) {
+        setPosition(e.latlng)
+        map.flyTo(e.latlng, map.getZoom())
+      },
+    })
+  
+    return position === null ? null : (
+      <Marker position={position}>
+        <Popup>You are here</Popup>
+      </Marker>
+    )
+  }
+
+  function LocationMarker1() {
+    const [position, setPosition] = useState(null)
+    const map = useMapEvents({
+      click(e) {
+        setPosition(e.latlng)
+        console.log(position)
+        map.flyTo(e.latlng, map.getZoom())
+      }
+    })
+
+    return position === null ? null : (
+      <Marker position={position}>
+        <Popup>You are ACTUALLY here</Popup>
+      </Marker>
+    )
+  }
+  
+  
   return (
     <MapContainer center={polylineReal[0]} zoom={12} className="mx-auto">
       <TileLayer
@@ -592,6 +643,7 @@ const LeafletComponent = () => {
         </Popup>
       </Marker>
       <Polyline pathOptions={{color: 'red'}} positions={polylineReal} />
+      <LocationMarker1 />
     </MapContainer>
   )
 };

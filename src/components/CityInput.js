@@ -20,6 +20,24 @@ const CityInput = () => {
           </Form>
         </Col>
       </Row>
+
+      <Form className="mb-4">
+        <Row>
+          <Col xs={{span: '8', offset: '2' }}>
+            <Row className="align-items-center">
+              <Col xs={8}>
+                <Form.Control placeholder="City" />
+              </Col>
+              <Col>
+                <Form.Control placeholder="State" />
+              </Col>
+              <Col xs="auto">
+                <Button xs="auto">Search</Button>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </Form>
     </Container>
   )
 }
