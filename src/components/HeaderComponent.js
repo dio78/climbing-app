@@ -1,7 +1,7 @@
 import { getRouteData } from "../actions";
 
 const HeaderComponent = () => {
-  // getRouteData([25, 50], [30, 18]);
+  //    getRouteData([25, 50], [25.2, 50.2]);
 
   return (
     <div className="header">
