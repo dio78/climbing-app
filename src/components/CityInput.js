@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Container, Row, Col, Form, InputGroup, FormControl, Button } from "react-bootstrap";
 
 const CityInput = (props) => {
-  // const startingWaypoint = useSelector((state) => state.wayPoint1);
+  // const startingWaypoint = useSelector((state) => state.waypoints.point1);
 
   const [searchLocation, setSearchLocation] = useState('');
 
