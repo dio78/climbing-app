@@ -1,11 +1,32 @@
+import { useState } from "react";
+import { useSelector } from "react-redux";
 import { Container, Row, Col, Form, InputGroup, FormControl, Button } from "react-bootstrap";
 
-const CityInput = () => {
+const CityInput = (props) => {
+  // const startingWaypoint = useSelector((state) => state.wayPoint1);
+
+  const [searchLocation, setSearchLocation] = useState('');
+
+  const [searchData, setSearchData] = useState('')
+
+  const validateInput = (e) => {
+    setSearchLocation(e.target.value);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('click');
-  } 
+    setSearchData(searchLocation)
+    // ACTION
+
+    
+  }
+
+  const renderMap = () => {
+    if (searchData.length > 0) {
+      return <div>{props.children}</div>
+    }
+  }
 
   return (
     <Container>
@@ -50,8 +71,9 @@ const CityInput = () => {
               <Col>
                 <InputGroup className="mb-2">
                   <Button type="submit" variant="outline-secondary">Current Location</Button>
-                  <FormControl placeholder="Enter start location"></FormControl>
+                  <FormControl value={searchLocation} placeholder="Enter start location" onChange={validateInput}></FormControl>
                 </InputGroup>
+                <h1>{searchLocation}</h1>
               </Col>
             </Row>
             <Row className="mb-2">
@@ -68,7 +90,7 @@ const CityInput = () => {
           </Form>
         </Col>
       </Row>
-      
+      {renderMap()}
     </Container>
   )
 }

@@ -12,8 +12,9 @@ function App() {
       <Row>
         <Col xs={{ span: 10, offset: 1}} className='text-center'>
           <Header />
-          <CityInput />
-          <LeafletComponent />
+            <CityInput>
+              <LeafletComponent />
+            </CityInput>
           <Information />
         </Col>
       </Row>
