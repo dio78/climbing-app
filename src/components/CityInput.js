@@ -1,9 +1,13 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Container, Row, Col, Form, InputGroup, FormControl, Button } from "react-bootstrap";
+import { getWayPoint1, getWayPoint2, getRouteData } from '../actions';
 
 const CityInput = (props) => {
-  // const startingWaypoint = useSelector((state) => state.wayPoint1);
+  const startingWaypoint = useSelector((state) => state.waypoints.point1);
+  const geometry = useSelector((state) => state.routeData.geometry);
+
+  const dispatch = useDispatch();
 
   const [searchLocation, setSearchLocation] = useState('');
 
@@ -18,13 +22,14 @@ const CityInput = (props) => {
     console.log('click');
     setSearchData(searchLocation)
     // ACTION
-
+    // dispatch(getRouteData([25, 30], [25.1, 30.1]));
+    // dispatch(getWayPoint1(searchLocation))
     
   }
 
   const renderMap = () => {
     if (searchData.length > 0) {
-      return <div>{props.children}</div>
+      return <div>{props.children}{geometry}</div>
     }
   }
 
