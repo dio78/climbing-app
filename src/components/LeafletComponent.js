@@ -53,12 +53,12 @@ const LeafletComponent = () => {
 
 
   function NewPolyline() {
-    return geometry === null ? null : (
+    return geometry.length < 0 ? null : (
       <Polyline pathOptions={{color: 'green'}} positions={geometry} />
     )
   }
 
-  if (geometry !== null) {
+  if (geometry.length > 0) {
     return (
       <Container className="mb-4">
         <Row>
@@ -83,7 +83,9 @@ const LeafletComponent = () => {
       </Container>
     )
   }
-  return null
+  return (
+    <div>Loading</div>
+  )
 };
 
 export default LeafletComponent;
