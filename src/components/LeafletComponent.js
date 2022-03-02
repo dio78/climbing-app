@@ -1,13 +1,17 @@
-import { MapContainer, TileLayer, Marker, Popup, Polyline, useMapEvents } from "react-leaflet";
-import { useState } from "react";
+import { Map, MapContainer, TileLayer, Marker, Popup, Polyline, useMapEvents, useMap } from "react-leaflet";
+import { useEffect, useRef, useState } from "react";
 import '../Leaflet.css'
-import { Col, Container, Row } from "react-bootstrap";
+import { Button, Col, Container, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
 const LeafletComponent = () => {
 
   const startingWaypoint = useSelector((state) => state.waypoints.point1);
   const geometry = useSelector((state) => state.routeData.geometry);
+
+  // useEffect(() => {
+  //   FlyHere()
+  // },[startingWaypoint])
 
   const polyline = [
     [
@@ -581,8 +585,10 @@ const LeafletComponent = () => {
   //   polyline.push([input['lon'], input['lat']])
   // }
 
+ 
 
   function LocationMarker1() {
+     console.log(geometry)
     const [position, setPosition] = useState(null)
     const map = useMapEvents({
       click(e) {
@@ -598,32 +604,48 @@ const LeafletComponent = () => {
       </Marker>
     )
   }
-  
-  
+
+  function StartingMarker() {
+    const map = useMap();
+    map.flyTo(startingWaypoint, map.getZoom(14));
+
+    return startingWaypoint === null ? null : (
+      <Marker position={startingWaypoint}>
+        <Popup>You are ACTUALLY here</Popup>
+      </Marker>
+    )
+  }
+
+  function NewPolyline() {
+    return geometry === null ? null : (
+      <Polyline pathOptions={{color: 'green'}} positions={polylineReal} />
+    )
+  }
+
+
   return (
 
     <Container className="mb-4">
       <Row>
         <Col>
           <div>Click a location on the map to set a marker</div>
+          <div>{startingWaypoint}</div>
+          <Button>Fly</Button>
         </Col>
       </Row>
-    
+
       <MapContainer center={polylineReal[0]} zoom={12} className="mx-auto">
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <Marker position={polylineReal[0]}>
-          <Popup>
-            A pretty CSS3 popup. <br /> Easily customizable.
-          </Popup>
-        </Marker>
+        <StartingMarker />
         <Marker position={polylineReal[polylineReal.length - 1]}>
           <Popup>
             A pretty CSS3 popup. <br /> Easily customizable.
           </Popup>
         </Marker>
+        <NewPolyline />
         <Polyline pathOptions={{color: 'red'}} positions={polylineReal} />
         <LocationMarker1 />
       </MapContainer>
