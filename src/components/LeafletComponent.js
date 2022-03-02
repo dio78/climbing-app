@@ -2,8 +2,12 @@ import { MapContainer, TileLayer, Marker, Popup, Polyline, useMapEvents } from "
 import { useState } from "react";
 import '../Leaflet.css'
 import { Col, Container, Row } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
 const LeafletComponent = () => {
+
+  const startingWaypoint = useSelector((state) => state.waypoints.point1);
+  const geometry = useSelector((state) => state.routeData.geometry);
 
   const polyline = [
     [
