@@ -624,7 +624,6 @@ const LeafletComponent = () => {
 
 
   return (
-
     <Container className="mb-4">
       <Row>
         <Col>

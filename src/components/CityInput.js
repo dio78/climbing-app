@@ -4,34 +4,66 @@ import { Container, Row, Col, Form, InputGroup, FormControl, Button } from "reac
 import { getWayPoint1, getWayPoint2, getRouteData } from '../actions';
 
 const CityInput = (props) => {
-  const startingWaypoint = useSelector((state) => state.waypoints.point1);
-  const geometry = useSelector((state) => state.routeData.geometry);
 
+  // Allowing for use of "dispatch"
   const dispatch = useDispatch();
 
-  const [searchLocation, setSearchLocation] = useState('');
+  // Getting access to state objects from redux store
+  const startingWaypoint = useSelector((state) => state.waypoints.point1);
+  const endingWaypoint = useSelector((state) => state.waypoints.point2);
+  const geometry = useSelector((state) => state.routeData.geometry);
 
-  const [searchData, setSearchData] = useState('')
+  // Setting up some useful state objects
+  const [startInput, setStartInput] = useState('');
+  const [endInput, setEndInput] = useState('');
+  const [searchStart, setSearchStart] = useState('');
+  const [searchEnd, setSearchEnd] = useState('');
 
-  const validateInput = (e) => {
-    setSearchLocation(e.target.value);
-  };
+  // Utilizing two "useEffect" functions to make sure our useful state objects are set before the dispatch goes off
+  useEffect(() =>{
+    dispatch(getWayPoint1(searchStart));
+    // console.log(searchStart);
+  }, [searchStart]);
 
   useEffect(() =>{
-    dispatch(getWayPoint1(searchData))
-  }, [searchData])
+    dispatch(getWayPoint2(searchEnd));
+    // console.log(searchEnd);
+  }, [searchEnd]);
 
+  useEffect(() => {
+    if (startingWaypoint.length > 0 && endingWaypoint.length > 0) {
+      console.log([[startingWaypoint], [endingWaypoint]]);
+      dispatch(getRouteData([startingWaypoint], [endingWaypoint]));
+      console.log(geometry)
+    }
+    
+  }, [startingWaypoint, endingWaypoint])
+
+
+  // Validating start location input
+  const validateStart = (e) => {
+    setStartInput([e.target.value])
+    //If these are not right, do something here (ex. "must include a letter" message)
+  };
+
+    // Validating end location input
+    const validateEnd = (e) => {
+      setEndInput([e.target.value])
+      //If these are not right, do something here (ex. "must include a letter" message)
+    };
+
+  
+  // Sets search values
   const handleSubmit = (e) => {
     e.preventDefault();
+
     console.log('click');
-    setSearchData(searchLocation);
-    // ACTION
-    // dispatch(getRouteData([25, 30], [25.1, 30.1]));
-    
+
+    setSearchStart(startInput);
+    setSearchEnd(endInput);
   }
 
   const renderMap = () => {
-    console.log(startingWaypoint)
     if (startingWaypoint.length > 0) {
       return <div>{props.children}</div>
     }
@@ -41,53 +73,21 @@ const CityInput = (props) => {
     <Container>
       <Row>
         <Col xs={{span: '8', offset: '2' }}>
-          <Form onSubmit={handleSubmit}>
-            <InputGroup className="mb-4">
-              <FormControl placeholder="Enter start location"></FormControl>
-              <FormControl placeholder="Enter destination "></FormControl>
-              <Button type="submit">Search</Button>
-            </InputGroup>
-          </Form>
-        </Col>
-      </Row>
 
-      <h4 className="mb-4">Or</h4>
-      
-      <Row className="mb-4">
-        <Col xs={{span: '8', offset: '2' }}>
-          <Form >
-          <Row className="align-items-center">
-            <Col xs={8}>
-              <Form.Control placeholder="City" />
-            </Col>
-            <Col>
-              <Form.Control placeholder="State" />
-            </Col>
-            <Col xs="auto">
-              <Button xs="auto">Search</Button>
-            </Col>
-          </Row>
-          </Form>
-        </Col>
-      </Row>
-      
-      <h4 className="mb-4">Or</h4>
-
-      <Row>
-        <Col xs={{span: '8', offset: '2' }}>
           <Form onSubmit={handleSubmit}>
             <Row>
               <Col>
                 <InputGroup className="mb-2">
                   <Button type="submit" variant="outline-secondary">Current Location</Button>
-                  <FormControl value={searchLocation} placeholder="Enter start location" onChange={validateInput}></FormControl>
+                  <FormControl value={startInput} placeholder="Enter start location" onChange={validateStart}></FormControl>
                 </InputGroup>
-                <h1>{searchLocation}</h1>
+                <h1>{startInput}</h1>
               </Col>
             </Row>
             <Row className="mb-2">
               <Col>
-                  <FormControl placeholder="Enter Destination Location"></FormControl>
+                  <FormControl value={endInput} placeholder="Enter Destination Location" onChange={validateEnd}></FormControl>
+                  <h1>{endInput}</h1>
               </Col>
             </Row>
             <Row className="mb-4">
@@ -95,8 +95,8 @@ const CityInput = (props) => {
                   <Button type="submit">Submit</Button>
               </Col>
             </Row>
-            
           </Form>
+
         </Col>
       </Row>
       {renderMap()}
