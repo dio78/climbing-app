@@ -21,23 +21,38 @@ const CityInput = (props) => {
 
   // Utilizing two "useEffect" functions to make sure our useful state objects are set before the dispatch goes off
   useEffect(() =>{
-    dispatch(getWayPoint1(searchStart));
+    if (searchStart.length > 0) {
+      dispatch(getWayPoint1(searchStart));  
+    }
+    
     // console.log(searchStart);
   }, [searchStart]);
 
   useEffect(() =>{
-    dispatch(getWayPoint2(searchEnd));
+    if (searchEnd.length > 0) {
+      dispatch(getWayPoint2(searchEnd));
+    }
+
     // console.log(searchEnd);
   }, [searchEnd]);
 
   useEffect(() => {
     if (startingWaypoint.length > 0 && endingWaypoint.length > 0) {
-      console.log([[startingWaypoint], [endingWaypoint]]);
-      dispatch(getRouteData([startingWaypoint], [endingWaypoint]));
-      console.log(geometry)
+      console.log([[startingWaypoint], [endingWaypoint]])
+      console.log(typeof startingWaypoint[0])
+
+      const routeStart = [startingWaypoint[0].toString(), startingWaypoint[1].toString()]
+      const routeEnd = [endingWaypoint[0].toString(), endingWaypoint[1].toString()]
+
+      dispatch(getRouteData(routeStart, routeEnd));
     }
-    
+
   }, [startingWaypoint, endingWaypoint])
+
+  // useEffect(() => {
+  //   if (geometry.length > 0) {
+  //   }
+  // })
 
 
   // Validating start location input
@@ -65,6 +80,7 @@ const CityInput = (props) => {
 
   const renderMap = () => {
     if (startingWaypoint.length > 0) {
+      console.log(props)
       return <div>{props.children}</div>
     }
   }
@@ -72,7 +88,7 @@ const CityInput = (props) => {
   return (
     <Container>
       <Row>
-        <Col xs={{span: '8', offset: '2' }}>
+        <Col xs={12}>
 
           <Form onSubmit={handleSubmit}>
             <Row>
