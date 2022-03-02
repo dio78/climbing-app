@@ -23,8 +23,7 @@ const CityInput = (props) => {
     setSearchData(searchLocation)
     // ACTION
     // dispatch(getRouteData([25, 30], [25.1, 30.1]));
-    // dispatch(getWayPoint1(searchLocation))
-    
+    dispatch(getWayPoint1(searchData))
   }
 
   const renderMap = () => {
