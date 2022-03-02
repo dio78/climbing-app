@@ -79,7 +79,7 @@ const CityInput = (props) => {
   }
 
   const renderMap = () => {
-    if (startingWaypoint.length > 0) {
+    if (startingWaypoint.length > 0 && endingWaypoint.length > 0) {
       console.log(props)
       return <div>{props.children}</div>
     }
