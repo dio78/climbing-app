@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 const LeafletComponent = () => {
 
   const startingWaypoint = useSelector((state) => state.waypoints.point1);
+  const endingWaypoint = useSelector((state) => state.waypoints.point2)
   const geometry = useSelector((state) => state.routeData.geometry);
 
   // useEffect(() => {
@@ -588,7 +589,6 @@ const LeafletComponent = () => {
  
 
   function LocationMarker1() {
-     console.log(geometry)
     const [position, setPosition] = useState(null)
     const map = useMapEvents({
       click(e) {
@@ -608,13 +608,20 @@ const LeafletComponent = () => {
   function StartingMarker() {
     const map = useMap();
     map.flyTo(startingWaypoint, map.getZoom(14));
-
-    return startingWaypoint === null ? null : (
+    console.log(endingWaypoint)
+    return startingWaypoint === null || endingWaypoint === null ? null : (
+      <>
       <Marker position={startingWaypoint}>
-        <Popup>You are ACTUALLY here</Popup>
+        <Popup>Starting Waypoint</Popup>
       </Marker>
+      <Marker position={endingWaypoint}>
+        <Popup>Ending Waypoint</Popup>
+      </Marker>
+      </>
     )
   }
+
+
 
   function NewPolyline() {
     return geometry === null ? null : (
@@ -629,6 +636,7 @@ const LeafletComponent = () => {
         <Col>
           <div>Click a location on the map to set a marker</div>
           <div>{startingWaypoint}</div>
+          <div>{endingWaypoint}</div>
           <Button>Fly</Button>
         </Col>
       </Row>
