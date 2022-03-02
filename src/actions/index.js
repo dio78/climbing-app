@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const WAYPOINT_1_RECEIVED = 'WAYPOINT_1_RECEIVED';
-export const WAYPOINT_2_RECEIVED = 'WAYPOINT_2_RECEIVED'
+export const WAYPOINT_2_RECEIVED = 'WAYPOINT_2_RECEIVED';
 export const ROUTE_INFO_RECEIVED = 'ROUTE_INFO_RECEIVED';
 
 const API_KEY = process.env.REACT_APP_GEOAPIFY_KEY;
