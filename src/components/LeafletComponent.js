@@ -2,7 +2,8 @@ import { Map, MapContainer, TileLayer, Marker, Popup, Polyline, useMapEvents, us
 import { useEffect, useRef, useState } from "react";
 import '../Leaflet.css'
 import { Button, Col, Container, Row } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { setWaypoint2 } from "../actions";
 
 const LeafletComponent = () => {
 
@@ -585,10 +586,11 @@ const LeafletComponent = () => {
   //   polyline.push([input['lon'], input['lat']])
   // }
 
- 
+  
 
   function LocationMarker1() {
-     console.log(geometry)
+    console.log(geometry)
+    const dispatch = useDispatch();
     const [position, setPosition] = useState(null)
     const map = useMapEvents({
       click(e) {
@@ -597,6 +599,12 @@ const LeafletComponent = () => {
         map.flyTo(e.latlng, map.getZoom())
       }
     })
+
+    useEffect(() => {
+      if (position) {
+        dispatch(setWaypoint2([position.lat, position.lng]));
+      }
+    }, [position]);
 
     return position === null ? null : (
       <Marker position={position}>
