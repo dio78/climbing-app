@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Container, Row, Col, Form, InputGroup, FormControl, Button } from "react-bootstrap";
 import { getWayPoint1, getWayPoint2, getRouteData } from '../actions';
@@ -17,21 +17,23 @@ const CityInput = (props) => {
     setSearchLocation(e.target.value);
   };
 
+  useEffect(() =>{
+    dispatch(getWayPoint1(searchData))
+  }, [searchData])
+
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('click');
-    setSearchData(searchLocation)
+    setSearchData(searchLocation);
     // ACTION
-    dispatch(getRouteData([25, 30], [25.1, 30.1]));
-
-
-    dispatch(getWayPoint1(searchData))
+    // dispatch(getRouteData([25, 30], [25.1, 30.1]));
     
   }
 
   const renderMap = () => {
-    if (searchData.length > 0) {
-      return <div>{props.children}{geometry}</div>
+    console.log(startingWaypoint)
+    if (startingWaypoint.length > 0) {
+      return <div>{props.children}</div>
     }
   }
 
