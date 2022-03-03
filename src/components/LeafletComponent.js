@@ -13,6 +13,7 @@ const LeafletComponent = forwardRef((_, ref) => {
   const startingWaypoint = useSelector((state) => state.waypoints.point1);
   const endingWaypoint = useSelector((state) => state.waypoints.point2)
   const geometry = useSelector((state) => state.routeData.geometry);
+  
 
   const dispatch=useDispatch()
 
@@ -57,6 +58,7 @@ const LeafletComponent = forwardRef((_, ref) => {
     return null
   }
 
+
   function EndingMarker() {
     if (startingWaypoint.length > 0 && endingWaypoint.length > 0) {
       return (
@@ -88,32 +90,33 @@ const LeafletComponent = forwardRef((_, ref) => {
     )
   }
 
-    return (
-      <Container className="mb-4">
-        <Row>
-          <Col>
-            <div>Click a location on the map to set a marker</div>
-            <div>{startingWaypoint}</div>
-            <div>{endingWaypoint}</div>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <MapContainer center={[0, 0]} zoom={4} className="mx-auto" whenCreated={map => dispatch(setMapInstance(map))}>
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              <StartingMarker />
-              <EndingMarker />
-              <LocationMarker1 />
-              <NewPolyline />
-              {/* <CurrentMarker /> */}
-            </MapContainer>
-          </Col>
-        </Row>
-      </Container>
-    )
+
+  return (
+    <Container className="mb-4">
+      <Row>
+        <Col>
+          <div>Click a location on the map to set a marker</div>
+          {<div>{startingWaypoint}</div>
+          <div>{endingWaypoint}</div>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <MapContainer center={[0, 0]} zoom={4} className="mx-auto" whenCreated={map => dispatch(setMapInstance(map))}>
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            <StartingMarker />
+            <EndingMarker />
+            <LocationMarker1 />
+            <NewPolyline />
+            {/* <CurrentMarker /> */}
+          </MapContainer>
+        </Col>
+      </Row>
+    </Container>
+  )
 });
 
 export default LeafletComponent;
