@@ -5,6 +5,7 @@ import { latLngBounds } from 'leaflet';
 import { Col, Container, Row } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { setWaypoint2, setMapInstance } from "../actions";
+import Information from "./Information";
 import L from 'leaflet'
 import { forwardRef} from "react";
 
@@ -13,6 +14,7 @@ const LeafletComponent = forwardRef((_, ref) => {
   const startingWaypoint = useSelector((state) => state.waypoints.point1);
   const endingWaypoint = useSelector((state) => state.waypoints.point2)
   const geometry = useSelector((state) => state.routeData.geometry);
+  const routeInfo = useSelector(state => state.routeData)
   
 
   const dispatch=useDispatch()
@@ -105,6 +107,11 @@ const LeafletComponent = forwardRef((_, ref) => {
     return null
   }
 
+  const renderInfo = () => {
+    if (geometry.length > 0) {
+      return <Information info={routeInfo}/>
+    }
+  }
 
   return (
     <Container className="mb-4">
@@ -117,7 +124,7 @@ const LeafletComponent = forwardRef((_, ref) => {
       </Row>
       <Row>
         <Col>
-          <MapContainer center={[0, 0]} zoom={4} className="mx-auto" whenCreated={map => dispatch(setMapInstance(map))}>
+          <MapContainer center={[0, 0]} zoom={2} className="mx-auto" whenCreated={map => dispatch(setMapInstance(map))}>
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -130,6 +137,7 @@ const LeafletComponent = forwardRef((_, ref) => {
           </MapContainer>
         </Col>
       </Row>
+      {renderInfo()}
     </Container>
   )
 });

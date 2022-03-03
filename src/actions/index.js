@@ -22,6 +22,7 @@ const routeDataCleaner = (apiResponse) => {
       {
         latlng: geometry[step.from_index], 
         distance_to_cover: step.distance, 
+        time: step.time,
         elevation_gain: step.elevation_gain, 
         starting_elevation: step.elevation, 
         instruction: step.instruction.text
