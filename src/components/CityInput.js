@@ -1,10 +1,13 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Container, Row, Col, Form, InputGroup, FormControl, Button } from "react-bootstrap";
-import { getWayPoint1, getWayPoint2, getRouteData } from '../actions';
-import LeafletComponent from "./LeafletComponent";
+import { getWayPoint1, getWayPoint2, getRouteData} from '../actions';
+import L from 'leaflet'
+
 
 const CityInput = (props) => {
+
+  const mapRef = useSelector((state) => state.mapRef);
 
   // Allowing for use of "dispatch"
   const dispatch = useDispatch();
@@ -50,12 +53,6 @@ const CityInput = (props) => {
 
   }, [startingWaypoint, endingWaypoint])
 
-  // useEffect(() => {
-  //   if (geometry.length > 0) {
-  //   }
-  // })
-
-
   // Validating start location input
   const validateStart = (e) => {
     setStartInput([e.target.value])
@@ -76,17 +73,23 @@ const CityInput = (props) => {
     setSearchEnd(endInput);
   }
 
-  const leafletFile = useRef();
-
-  const handleCurrentClick = () => {
-    leafletFile.current.enableCurrentLocation();
-  }
+  const handleClickThis = () => {
+    console.log('happening')
+    if(mapRef) {
+      mapRef.map.locate().on('locationfound', function(e) {
+        mapRef.map.flyTo(e.latlng, 14)
+       
+        console.log(e.latlng)
+        L.marker(e.latlng).addTo(mapRef.map)
+            .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
+            .openPopup();
   
-  const renderMap = () => {
-    if (startingWaypoint.length > 0 && endingWaypoint.length > 0) {
-      return <LeafletComponent ref={leafletFile}/>
+        mapRef.map.getZoom(14)
+        setStartInput(`${e.latlng.lat}, ${e.latlng.lng}`)
+      })
     }
   }
+  
 
   return (
     <Container>
@@ -97,7 +100,7 @@ const CityInput = (props) => {
             <Row>
               <Col>
                 <InputGroup className="mb-2">
-                  <Button type="submit" variant="outline-secondary" onClick={ handleCurrentClick }>Current Location</Button>
+                  <Button type="submit" variant="outline-secondary" onClick={ handleClickThis }>Current Location</Button>
                   <FormControl value={startInput} placeholder="Enter start location" onChange={validateStart}></FormControl>
                 </InputGroup>
                 <h1>{startInput}</h1>
@@ -115,10 +118,8 @@ const CityInput = (props) => {
               </Col>
             </Row>
           </Form>
-
         </Col>
-      </Row>
-      {renderMap()}
+      </Row>    
     </Container>
   )
 }
