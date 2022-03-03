@@ -8,11 +8,23 @@ export const WAYPOINT_2_SELECTED = 'WAYPOINT_2_SELECTED';
 const API_KEY = process.env.REACT_APP_GEOAPIFY_KEY;
 
 const routeDataCleaner = (apiResponse) => {
+  const steps = apiResponse.data.results[0].legs[0].steps;
+  const geometry = apiResponse.data.results[0].geometry[0].map((pair) => [pair.lat, pair.lon]);
+
   return {
-    geometry: apiResponse.data.results[0].geometry[0].map((pair) => [pair.lat, pair.lon]),
+    geometry,
     elevationData: apiResponse.data.results[0].legs[0].elevation_range,
     totalDistance: apiResponse.data.results[0].distance,
-    elevationGain: apiResponse.data.results[0].legs[0].steps.reduce((total, stepObj) => total + stepObj.elevation_gain, 0)
+    totalTime: apiResponse.data.results[0].legs[0].time,
+    elevationGain: steps.reduce((total, stepObj) => total + stepObj.elevation_gain, 0),
+    stepInfo: steps.map((step) => (
+      {
+        latlng: geometry[step.from_index], 
+        distance_to_cover: step.distance, 
+        elevation_gain: step.elevation_gain, 
+        starting_elevation: step.elevation, 
+        instruction: step.instruction.text
+      }))
   };
 };
 
