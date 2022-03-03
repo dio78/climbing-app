@@ -96,7 +96,7 @@ const LeafletComponent = forwardRef((_, ref) => {
       <Row>
         <Col>
           <div>Click a location on the map to set a marker</div>
-          {<div>{startingWaypoint}</div>
+          <div>{startingWaypoint}</div>
           <div>{endingWaypoint}</div>
         </Col>
       </Row>
