@@ -11,6 +11,7 @@ const LeafletComponent = () => {
   const startingWaypoint = useSelector((state) => state.waypoints.point1);
   const endingWaypoint = useSelector((state) => state.waypoints.point2)
   const geometry = useSelector((state) => state.routeData.geometry);
+  
 
   const dispatch=useDispatch()
 
@@ -19,9 +20,7 @@ const LeafletComponent = () => {
     const map = useMapEvents({
       click(e) {
         setPosition(e.latlng)
-        console.log(position)
-        map.flyTo(e.latlng, map.getZoom())
-        console.log(map);
+        console.log(position);
       }
     })
 
@@ -60,18 +59,21 @@ const LeafletComponent = () => {
     )
   }
 
-  function NewPolyline() {
+  function NewPolyline(props) {
     const map = useMap();
     useEffect(() => {
       let markerBounds = latLngBounds([]);
       markerBounds.extend(startingWaypoint);
       markerBounds.extend(endingWaypoint);
       map.fitBounds(markerBounds);
-    }, [map])
-    return geometry.length < 0 ? null : (
+    })
+    
+    return geometry.length === 0 ? null : (
       <Polyline pathOptions={{color: 'green'}} positions={geometry} />
     )
   }
+
+  
 
   if (geometry.length > 0) {
     return (
@@ -79,9 +81,9 @@ const LeafletComponent = () => {
         <Row>
           <Col>
             <div>Click a location on the map to set a marker</div>
-            <div>{startingWaypoint}</div>
+            {/* {<div>{startingWaypoint}</div>
             <div>{endingWaypoint}</div>
-            <Button>Fly</Button>
+            <Button>Fly</Button>} */}
           </Col>
         </Row>
   
@@ -97,7 +99,7 @@ const LeafletComponent = () => {
         </MapContainer>
       </Container>
     )
-  }
+  } 
   return (
     <div>Loading</div>
   )
