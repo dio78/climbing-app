@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Container, Row, Col, Form, InputGroup, FormControl, Button } from "react-bootstrap";
-import { getWayPoint1, getWayPoint2, getRouteData} from '../actions';
+import { getWayPoint1, getWayPoint2, getRouteData } from '../actions';
+import Information from "./Information";
 import L from 'leaflet'
-
 
 const CityInput = (props) => {
 
@@ -16,6 +16,7 @@ const CityInput = (props) => {
   const startingWaypoint = useSelector((state) => state.waypoints.point1);
   const endingWaypoint = useSelector((state) => state.waypoints.point2);
   const geometry = useSelector((state) => state.routeData.geometry);
+  const routeInfo = useSelector(state => state.routeData)
 
   // Setting up some useful state objects
   const [startInput, setStartInput] = useState('');
@@ -91,6 +92,12 @@ const CityInput = (props) => {
   }
   
 
+  const renderInfo = () => {
+    if (geometry.length > 0) {
+      return <Information info={routeInfo}/>
+    }
+  }
+
   return (
     <Container>
       <Row>
@@ -119,7 +126,8 @@ const CityInput = (props) => {
             </Row>
           </Form>
         </Col>
-      </Row>    
+      </Row>
+      {renderInfo()}
     </Container>
   )
 }

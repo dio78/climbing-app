@@ -14,7 +14,6 @@ function App() {
           <Header />
             <CityInput />
             <LeafletComponent />
-          <Information />
         </Col>
       </Row>
     </Container>
