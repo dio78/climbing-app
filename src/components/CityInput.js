@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Container, Row, Col, Form, InputGroup, FormControl, Button } from "react-bootstrap";
 import { getWayPoint1, getWayPoint2, getRouteData } from '../actions';
+import LeafletComponent from "./LeafletComponent";
 
 const CityInput = (props) => {
 
@@ -71,17 +72,19 @@ const CityInput = (props) => {
   // Sets search values
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    console.log('click');
-
     setSearchStart(startInput);
     setSearchEnd(endInput);
   }
 
+  const leafletFile = useRef();
+
+  const handleCurrentClick = () => {
+    leafletFile.current.enableCurrentLocation();
+  }
+  
   const renderMap = () => {
     if (startingWaypoint.length > 0 && endingWaypoint.length > 0) {
-      console.log(props)
-      return <div>{props.children}</div>
+      return <LeafletComponent ref={leafletFile}/>
     }
   }
 
@@ -94,7 +97,7 @@ const CityInput = (props) => {
             <Row>
               <Col>
                 <InputGroup className="mb-2">
-                  <Button type="submit" variant="outline-secondary">Current Location</Button>
+                  <Button type="submit" variant="outline-secondary" onClick={ handleCurrentClick }>Current Location</Button>
                   <FormControl value={startInput} placeholder="Enter start location" onChange={validateStart}></FormControl>
                 </InputGroup>
                 <h1>{startInput}</h1>
