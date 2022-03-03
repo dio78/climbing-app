@@ -4,6 +4,7 @@ export const WAYPOINT_1_RECEIVED = 'WAYPOINT_1_RECEIVED';
 export const WAYPOINT_2_RECEIVED = 'WAYPOINT_2_RECEIVED';
 export const ROUTE_INFO_RECEIVED = 'ROUTE_INFO_RECEIVED';
 export const WAYPOINT_2_SELECTED = 'WAYPOINT_2_SELECTED';
+export const SET_MAP = 'SET_MAP';
 
 const API_KEY = process.env.REACT_APP_GEOAPIFY_KEY;
 
@@ -28,6 +29,13 @@ export const getRouteData = ([lat1, lon1], [lat2, lon2]) => {
   return {
     type: ROUTE_INFO_RECEIVED,
     payload: request
+  }
+};
+
+export const setMapInstance = (map) => {
+  return {
+  type: SET_MAP,
+  payload: map 
   }
 };
 
