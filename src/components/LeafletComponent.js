@@ -85,9 +85,24 @@ const LeafletComponent = forwardRef((_, ref) => {
         map.flyToBounds(markerBounds)
       }
     }, [])
-    return geometry.length < 0 ? null : (
-      <Polyline pathOptions={{color: 'green'}} positions={geometry} />
-    )
+    console.log(geometry[geometry.length - 1])
+    console.log(endingWaypoint)
+    if (geometry.length > 0) {
+      function truncateToDecimals(num, dec = 2) {
+        const calcDec = Math.pow(10, dec);
+        return Math.trunc(num * calcDec) / calcDec;
+      }
+    const lastGeo = [truncateToDecimals(geometry[geometry.length - 1][0]), truncateToDecimals(geometry[geometry.length - 1][1])];
+    const endCheck = [truncateToDecimals(endingWaypoint[0]), truncateToDecimals(endingWaypoint[1])]
+    console.log('lastGeometry' + (geometry[geometry.length - 1]))
+    console.log('newGeo' + lastGeo)
+    console.log('endCheck' + endCheck)
+      if (lastGeo[0] === endCheck[0] && lastGeo[1] === endCheck[1])
+      return (
+        <Polyline pathOptions={{color: 'green'}} positions={geometry} />
+      )
+    }
+    return null
   }
 
 
