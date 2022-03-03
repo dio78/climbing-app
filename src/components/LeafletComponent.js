@@ -1,6 +1,7 @@
 import { Map, MapContainer, TileLayer, Marker, Popup, Polyline, useMapEvents, useMap } from "react-leaflet";
 import { useEffect, useRef, useState } from "react";
 import '../Leaflet.css'
+import { latLngBounds } from 'leaflet';
 import { Button, Col, Container, Row } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { setWaypoint2 } from "../actions";
@@ -10,14 +11,16 @@ const LeafletComponent = () => {
   const startingWaypoint = useSelector((state) => state.waypoints.point1);
   const endingWaypoint = useSelector((state) => state.waypoints.point2)
   const geometry = useSelector((state) => state.routeData.geometry);
+  
+
+  const dispatch=useDispatch()
 
   function LocationMarker1() {
     const [position, setPosition] = useState(null)
     const map = useMapEvents({
       click(e) {
         setPosition(e.latlng)
-        console.log(position)
-        map.flyTo(e.latlng, map.getZoom())
+        console.log(position);
       }
     })
 
@@ -55,25 +58,32 @@ const LeafletComponent = () => {
       </>
     )
   }
-  
 
-
-
-  function NewPolyline() {
-    return geometry === null ? null : (
+  function NewPolyline(props) {
+    const map = useMap();
+    useEffect(() => {
+      let markerBounds = latLngBounds([]);
+      markerBounds.extend(startingWaypoint);
+      markerBounds.extend(endingWaypoint);
+      map.fitBounds(markerBounds);
+    })
+    
+    return geometry.length === 0 ? null : (
       <Polyline pathOptions={{color: 'green'}} positions={geometry} />
     )
   }
 
-  if (geometry !== null) {
+  
+
+  if (geometry.length > 0) {
     return (
       <Container className="mb-4">
         <Row>
           <Col>
             <div>Click a location on the map to set a marker</div>
-            <div>{startingWaypoint}</div>
+            {/* {<div>{startingWaypoint}</div>
             <div>{endingWaypoint}</div>
-            <Button>Fly</Button>
+            <Button>Fly</Button>} */}
           </Col>
         </Row>
   
@@ -84,13 +94,15 @@ const LeafletComponent = () => {
           />
           <StartingMarker />
           <EndingMarker />
-          <NewPolyline />
           <LocationMarker1 />
+          <NewPolyline />
         </MapContainer>
       </Container>
     )
-  }
-  return null
+  } 
+  return (
+    <div>Loading</div>
+  )
 };
 
 export default LeafletComponent;
