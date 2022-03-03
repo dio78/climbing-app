@@ -102,7 +102,7 @@ const LeafletComponent = forwardRef((_, ref) => {
       </Row>
       <Row>
         <Col>
-          <MapContainer center={[0, 0]} zoom={4} className="mx-auto" whenCreated={map => dispatch(setMapInstance(map))}>
+          <MapContainer center={[0, 0]} zoom={2} className="mx-auto" whenCreated={map => dispatch(setMapInstance(map))}>
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
