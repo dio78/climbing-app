@@ -1,14 +1,18 @@
 import { Map, MapContainer, TileLayer, Marker, Popup, Polyline, useMapEvents, useMap } from "react-leaflet";
 import { useEffect, useRef, useState } from "react";
 import '../Leaflet.css'
+import { latLngBounds } from 'leaflet';
 import { Button, Col, Container, Row } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { setWaypoint2 } from "../actions";
 
 const LeafletComponent = () => {
 
   const startingWaypoint = useSelector((state) => state.waypoints.point1);
   const endingWaypoint = useSelector((state) => state.waypoints.point2)
   const geometry = useSelector((state) => state.routeData.geometry);
+
+  const dispatch=useDispatch()
 
   function LocationMarker1() {
     const [position, setPosition] = useState(null)
@@ -17,8 +21,15 @@ const LeafletComponent = () => {
         setPosition(e.latlng)
         console.log(position)
         map.flyTo(e.latlng, map.getZoom())
+        console.log(map);
       }
     })
+
+    useEffect(() => {
+      if (position) {
+        dispatch(setWaypoint2([position.lat, position.lng]));
+      }
+    }, [position]);
 
     return position === null ? null : (
       <Marker position={position}>
@@ -48,11 +59,15 @@ const LeafletComponent = () => {
       </>
     )
   }
-  
-
-
 
   function NewPolyline() {
+    const map = useMap();
+    useEffect(() => {
+      let markerBounds = latLngBounds([]);
+      markerBounds.extend(startingWaypoint);
+      markerBounds.extend(endingWaypoint);
+      map.fitBounds(markerBounds);
+    }, [map])
     return geometry.length < 0 ? null : (
       <Polyline pathOptions={{color: 'green'}} positions={geometry} />
     )
@@ -77,8 +92,8 @@ const LeafletComponent = () => {
           />
           <StartingMarker />
           <EndingMarker />
-          <NewPolyline />
           <LocationMarker1 />
+          <NewPolyline />
         </MapContainer>
       </Container>
     )
