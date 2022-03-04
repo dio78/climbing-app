@@ -14,8 +14,8 @@ const Information = ({ info }) => {
   const parsedTotalTime = parseSeconds(info.totalTime);
 
   return (
-    <div className="info-container">
-      <Container>
+    <div className="info-container mt-4">
+      <Container className="background-styling">
 
         <div id="totals-styling" className="text-center">
           <Row>
