@@ -268,11 +268,10 @@ const LeafletComponent = forwardRef((_, ref) => {
         </Col>
         <Col className="background-styling mb-4" xs={{span: 10, offset: 1}} style={{ height: showGraph ? '15rem': '0rem'}}>
           <LineGraph />
-          {renderInfo()}
         </Col>
         
       </Row>
-      
+      {renderInfo()}
       
     </Container>
   )
