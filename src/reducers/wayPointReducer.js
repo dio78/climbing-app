@@ -17,7 +17,9 @@ const wayPointReducer = (state = defaultState, action) => {
   if (action.type === WAYPOINT_2_SELECTED) {
     return {...state, point2: action.payload}
   }
-
+  if (action.type=== 'WAYPOINT_1_SELECTED') {
+    return {...state, point2: action.payload}
+  }
   return state;
 };
 

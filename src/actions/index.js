@@ -80,3 +80,10 @@ export const setWaypoint2 = (coords) => {
     payload: coords
   }
 }
+
+export const setWaypoint1 = (coords) => {
+  return {
+    type: 'WAYPOINT_1_SELECTED',
+    payload: coords
+  }
+}
