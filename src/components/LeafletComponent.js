@@ -6,7 +6,6 @@ import { Col, Container, Row } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { setWaypoint2, setMapInstance, setWaypoint1 } from "../actions";
 import Information from "./Information";
-import L from 'leaflet'
 import { forwardRef} from "react";
 
 const LeafletComponent = forwardRef((_, ref) => {
@@ -15,7 +14,6 @@ const LeafletComponent = forwardRef((_, ref) => {
   const endingWaypoint = useSelector((state) => state.waypoints.point2)
   const geometry = useSelector((state) => state.routeData.geometry);
   const routeInfo = useSelector(state => state.routeData)
-  const mapReference = useSelector(state => state.mapRef);
   
 
   const dispatch=useDispatch()

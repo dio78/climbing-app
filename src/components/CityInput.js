@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Container, Row, Col, Form, InputGroup, FormControl, Button } from "react-bootstrap";
 import { getWayPoint1, getWayPoint2, getRouteData, setWaypoint1, setWaypoint2, resetRouteData } from '../actions';
-import L, {latLngBounds} from 'leaflet'
 
 const CityInput = (props) => {
   // useful map instance state
@@ -14,7 +13,6 @@ const CityInput = (props) => {
   // Getting access to state objects from redux store
   const startingWaypoint = useSelector((state) => state.waypoints.point1);
   const endingWaypoint = useSelector((state) => state.waypoints.point2);
-  const geometry = useSelector((state) => state.routeData.geometry);
 
   // Setting up some useful state objects
   const [startInput, setStartInput] = useState('');
