@@ -69,24 +69,26 @@ const CityInput = (props) => {
   
   // Sets search values
   const handleSubmit = (e) => {
-    e.preventDefault();
-    setSearchStart(startInput);
-    setSearchEnd(endInput);
+    if(startInput && !endInput) {
+      e.preventDefault();
+      setSearchStart(startInput);
+    } else if (startInput && endInput) {
+      e.preventDefault();
+      setSearchStart(startInput);
+      setSearchEnd(endInput);
+    } else {
+      alert('Enter a starting location or use current location')
+    }
   }
 
-  const handleClickThis = () => {
+  const handleClickThis = (e) => {
+    e.preventDefault()
     console.log('happening')
     if(mapRef) {
       mapRef.map.locate().on('locationfound', function(e) {
-        mapRef.map.flyTo(e.latlng, 14)
-       
-        console.log(e.latlng)
-        L.marker(e.latlng).addTo(mapRef.map)
-            .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
-            .openPopup();
-  
         mapRef.map.getZoom(14)
         setStartInput(`${e.latlng.lat}, ${e.latlng.lng}`)
+        setSearchStart(`${e.latlng.lat}, ${e.latlng.lng}`)
       })
     }
   }
