@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer, Marker, Popup, Polyline, useMapEvents, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, Polyline, CircleMarker, Tooltip, useMapEvents, useMap } from "react-leaflet";
 import { useEffect, useState } from "react";
 import '../Leaflet.css'
 import { latLngBounds } from 'leaflet';
@@ -15,6 +15,7 @@ const LeafletComponent = forwardRef((_, ref) => {
   const endingWaypoint = useSelector((state) => state.waypoints.point2)
   const geometry = useSelector((state) => state.routeData.geometry);
   const routeInfo = useSelector(state => state.routeData)
+  const mapReference = useSelector(state => state.mapRef);
   
 
   const dispatch=useDispatch()
@@ -107,10 +108,26 @@ const LeafletComponent = forwardRef((_, ref) => {
     return null
   }
 
+  function NewStepMarkers() {
+    if (geometry.length > 0) {
+      const stepMarkers = routeInfo.stepInfo.map((step, index) => {
+        const circle = <CircleMarker key={index + 1} center={step.latlng} radius={5}>
+          <Tooltip>Step {index + 1}: {step.instruction}</Tooltip>
+        </CircleMarker>
+        return circle;
+      });
+
+      return stepMarkers;
+    }
+    return null;
+  }
+
   const renderInfo = () => {
     if (geometry.length > 0) {
       return <Information info={routeInfo}/>
     }
+
+    return null;
   }
 
   return (
@@ -133,6 +150,7 @@ const LeafletComponent = forwardRef((_, ref) => {
             <EndingMarker />
             <LocationMarker1 />
             <NewPolyline />
+            <NewStepMarkers />
             {/* <CurrentMarker /> */}
           </MapContainer>
         </Col>
