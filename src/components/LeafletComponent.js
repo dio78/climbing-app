@@ -2,13 +2,14 @@ import { MapContainer, TileLayer, Marker, Popup, Polyline, CircleMarker, Tooltip
 import { useEffect, useState } from "react";
 import '../Leaflet.css'
 import { latLngBounds } from 'leaflet';
-import { Col, Container, Row } from "react-bootstrap";
+import { Button, Col, Container, Row } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { setWaypoint2, setMapInstance, setWaypoint1 } from "../actions";
 import Information from "./Information";
 import { forwardRef} from "react";
 import { Line } from "react-chartjs-2";
 import { Chart, registerables } from 'chart.js';
+import { Handler } from "leaflet";
 
 
 Chart.register(...registerables);
@@ -20,6 +21,8 @@ const LeafletComponent = forwardRef((_, ref) => {
   const geometry = useSelector((state) => state.routeData.geometry);
   const routeInfo = useSelector(state => state.routeData)
   
+  const [showGraph, setShowGraph] = useState(true);
+  const [graph, setGraph] = useState(false);
 
   const dispatch=useDispatch()
 
@@ -28,7 +31,6 @@ const LeafletComponent = forwardRef((_, ref) => {
     const [position, setPosition] = useState(null)
     const map = useMapEvents({
       click(e) {
-        console.log(e.latlng)
         setPosition(e.latlng)
       }
     })
@@ -98,7 +100,6 @@ const LeafletComponent = forwardRef((_, ref) => {
       markerBounds.extend(endingWaypoint);
       map.flyToBounds(markerBounds, {padding: [40, 40]})
     }
-    console.log(endingWaypoint)
     if (geometry.length > 0) {
       function truncateToDecimals(num, dec = 2) {
         const calcDec = Math.pow(10, dec);
@@ -126,6 +127,19 @@ const LeafletComponent = forwardRef((_, ref) => {
     return null;
   }
 
+
+  
+
+  const handleShowGraph = (e) => {
+    e.preventDefault();
+    if (!showGraph) {
+      setShowGraph(true)
+    } else {
+      setShowGraph(false)
+    }
+    console.log(showGraph)
+  }
+
   function LineGraph () {
     if(routeInfo.elevationData.length > 0) {
       const labels = []
@@ -141,7 +155,6 @@ const LeafletComponent = forwardRef((_, ref) => {
       const minDist = 5;
       const minHeight = 2
 
-      console.log('labels:' + labels)
       labels.forEach((distance, index) => {
         if (index === 0 || index === labels.length - 1 || (distance - labelsOptimized[labelsOptimized.length - 1]) > minDist || Math.abs(data[index] - dataOptimized[dataOptimized.length - 1]) > minHeight) {
           labelsOptimized.push(distance);
@@ -163,12 +176,12 @@ const LeafletComponent = forwardRef((_, ref) => {
       };
       
       const options = {
-        maintainAspectRation: false,
+        responsive: true,
+        maintainAspectRatio: false,
         onHover: function (e,item) {
           if(item.length > 0) {
             console.log(item[0].element.$context.raw)
           }
-          console.log(this.tooltip)
         },
         interaction: {
           intersect: false,
@@ -221,12 +234,14 @@ const LeafletComponent = forwardRef((_, ref) => {
           }
         },
       };
-      console.log(routeInfo)
-      return (
-        <Line options={options} data={chartData} />
-      )
+      if (showGraph){
+        setGraph(true)
+        return (
+          <Line options={options} data={chartData} />
+        )
+      }
     }
-
+    
     return null
     
   }
@@ -239,7 +254,7 @@ const LeafletComponent = forwardRef((_, ref) => {
         </Col>
       </Row>
       <Row>
-        <Col>
+        <Col className="mb-5">
           <MapContainer center={[0, 0]} zoom={2} className="mx-auto" whenCreated={map => dispatch(setMapInstance(map))}>
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -251,7 +266,7 @@ const LeafletComponent = forwardRef((_, ref) => {
             <NewPolyline />
           </MapContainer>
         </Col>
-        <Col className="background-styling" xs={{span: 10, offset: 1}}>
+        <Col className="background-styling" xs={{span: 10, offset: 1}} style={{ height: showGraph ? '15rem': '0rem'}}>
           <LineGraph />
           {renderInfo()}
         </Col>
