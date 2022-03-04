@@ -27,30 +27,26 @@ const LeafletComponent = forwardRef((_, ref) => {
       click(e) {
         console.log(e.latlng)
         setPosition(e.latlng)
-        map.flyTo(e.latlng, map.getZoom())
-        console.log(map);
       }
     })
 
     useEffect(() => {
-      if (position) {
+      if (position && startingWaypoint.length > 0) {
         dispatch(setWaypoint2([position.lat, position.lng]));
       }
     }, [position]);
 
     return position === null ? null : (
       <Marker position={position}>
-        <Popup>You are ACTUALLY here</Popup>
       </Marker>
     )
   }
 
   function StartingMarker() {
     const map = useMap();
-
     if (startingWaypoint.length > 0){
-      map.flyTo(startingWaypoint, 14); 
-      return startingWaypoint === null || endingWaypoint === null ? null : (
+      map.flyTo(startingWaypoint, 14);
+      return (
         <>
         <Marker position={startingWaypoint}>
           <Popup>Starting Waypoint</Popup>
@@ -75,20 +71,27 @@ const LeafletComponent = forwardRef((_, ref) => {
     return null
   }
 
+  function NewStepMarkers() {
+    
+    const stepMarkers = routeInfo.stepInfo.map((step, index) => {
+      const circle = <CircleMarker key={index + 1} center={step.latlng} radius={5}>
+        <Tooltip>Step {index + 1}: {step.instruction}</Tooltip>
+      </CircleMarker>
+      return circle;
+    });
+
+    return stepMarkers;
+  }
   
   // Polyline Stuff
   function NewPolyline() {
-    if (geometry.length > 0) {}
     const map = useMap();
-    useEffect(() => {
-      if (geometry.length > 0) {
-        let markerBounds = latLngBounds([]);
-        markerBounds.extend(startingWaypoint);
-        markerBounds.extend(endingWaypoint);
-        map.flyToBounds(markerBounds, {padding: [40, 40]})
-      }
-    }, [])
-    console.log(geometry[geometry.length - 1])
+    if (geometry.length > 0) {
+      let markerBounds = latLngBounds([]);
+      markerBounds.extend(startingWaypoint);
+      markerBounds.extend(endingWaypoint);
+      map.flyToBounds(markerBounds, {padding: [40, 40]})
+    }
     console.log(endingWaypoint)
     if (geometry.length > 0) {
       function truncateToDecimals(num, dec = 2) {
@@ -97,29 +100,16 @@ const LeafletComponent = forwardRef((_, ref) => {
       }
     const lastGeo = [truncateToDecimals(geometry[geometry.length - 1][0]), truncateToDecimals(geometry[geometry.length - 1][1])];
     const endCheck = [truncateToDecimals(endingWaypoint[0]), truncateToDecimals(endingWaypoint[1])]
-    console.log('lastGeometry' + (geometry[geometry.length - 1]))
-    console.log('newGeo' + lastGeo)
-    console.log('endCheck' + endCheck)
-      if (lastGeo[0] === endCheck[0] && lastGeo[1] === endCheck[1])
-      return (
-        <Polyline pathOptions={{color: 'green'}} positions={geometry} />
-      )
+      if (lastGeo[0] === endCheck[0] && lastGeo[1] === endCheck[1]) {
+        return (
+          <div>
+            <Polyline pathOptions={{color: 'green'}} positions={geometry} />
+            <NewStepMarkers />
+          </div>
+        )
+      }
     }
     return null
-  }
-
-  function NewStepMarkers() {
-    if (geometry.length > 0) {
-      const stepMarkers = routeInfo.stepInfo.map((step, index) => {
-        const circle = <CircleMarker key={index + 1} center={step.latlng} radius={5}>
-          <Tooltip>Step {index + 1}: {step.instruction}</Tooltip>
-        </CircleMarker>
-        return circle;
-      });
-
-      return stepMarkers;
-    }
-    return null;
   }
 
   const renderInfo = () => {
@@ -134,9 +124,7 @@ const LeafletComponent = forwardRef((_, ref) => {
     <Container className="mb-4">
       <Row>
         <Col>
-          <div>Click a location on the map to set a marker</div>
-          <div>{startingWaypoint}</div>
-          <div>{endingWaypoint}</div>
+          <div id="welcome-message">Click a location on the map to set a marker.</div>
         </Col>
       </Row>
       <Row>
@@ -150,7 +138,6 @@ const LeafletComponent = forwardRef((_, ref) => {
             <EndingMarker />
             <LocationMarker1 />
             <NewPolyline />
-            <NewStepMarkers />
             {/* <CurrentMarker /> */}
           </MapContainer>
         </Col>

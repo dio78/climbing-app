@@ -40,10 +40,10 @@ const Information = ({ info }) => {
           </Row>
           <Row>
             <Col>
-              <p className="distance"><span>{info.totalDistance} meters</span></p>
+              <p className="distance"><span>{info.totalDistance}  meters</span></p>
             </Col>
             <Col>
-              <p className="total-elevation"><span >{info.elevationGain}</span></p>
+              <p className="total-elevation"><span >{info.elevationGain}  meters</span></p>
             </Col>
             <Col>
               <p><span className="time">{parsedTotalTime.minutes + ' minutes   '}</span></p>
@@ -62,7 +62,7 @@ const Information = ({ info }) => {
 
         <div id="directions-styling">
           <h3 className="text-center directions-title">Instructions</h3>
-          {stepInfo.map((step, index) => {
+          {stepInfo.map((step, index, array) => {
             return (
               <div key={index} className="direction">
                 <Row>
@@ -70,22 +70,22 @@ const Information = ({ info }) => {
                     <div>{`${index + 1}.  ${step.instruction}`}</div>
                   </Col>
                   <Col>
-                      <Container>
-                        <Row>
-                          <Col>
-                            <h6>Distance To Cover</h6>
-                            <p>{step.distance_to_cover} meters</p>
-                          </Col>
-                          <Col>
-                            <h6>Elevation Change </h6>
-                            <p>{step.elevation_gain} meters</p>
-                          </Col>
-                          <Col>
-                            <h6>Time</h6>
-                            <p>{parseSeconds(step.time).hours} hours, {parseSeconds(step.time).minutes} minutes</p>
-                          </Col>
-                        </Row>
-                      </Container>
+                    {index + 1 !== array.length ? <Container>
+                      <Row>
+                        <Col>
+                          <h6>Distance To Cover</h6>
+                          <p>{step.distance_to_cover} meters</p>
+                        </Col>
+                        <Col>
+                          <h6>Elevation Change </h6>
+                          <p>{step.elevation_gain} meters</p>
+                        </Col>
+                        <Col>
+                          <h6>Time</h6>
+                          <p>{parseSeconds(step.time).hours} hours, {parseSeconds(step.time).minutes} minutes</p>
+                        </Col>
+                      </Row>
+                    </Container> : (<p className="text-center"><strong>Happy Hiking!</strong></p>)}
                   </Col>
                 </Row>
               </div>
