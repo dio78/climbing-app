@@ -235,7 +235,7 @@ const LeafletComponent = forwardRef((_, ref) => {
     <Container className="mb-4">
       <Row>
         <Col>
-          <div id="welcome-message">Click a location on the map to set a marker.</div>
+          <div id="welcome-message"></div>
         </Col>
       </Row>
       <Row>
@@ -249,16 +249,16 @@ const LeafletComponent = forwardRef((_, ref) => {
             <EndingMarker />
             <LocationMarker1 />
             <NewPolyline />
-            {/* <CurrentMarker /> */}
           </MapContainer>
         </Col>
-        <Col xs={{span: 10, offset: 1}}>
+        <Col className="background-styling" xs={{span: 10, offset: 1}}>
           <LineGraph />
+          {renderInfo()}
         </Col>
         
       </Row>
       
-      {renderInfo()}
+      
     </Container>
   )
 });

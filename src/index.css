@@ -5,11 +5,31 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-image: url("https://wallup.net/wp-content/uploads/2019/09/239522-nature-mountain-forest-landscape-fog-lake-ultrahd-4k-wallpaper-1.jpg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+.header {
+  color: white;
+  font-family: "Hubballi", cursive;
+}
+
+.app {
+  background-color: rgba(4, 36, 7, 0.719);
+  width: 75%;
+}
+
+.background-styling {
+  background-color: rgba(237, 253, 243, 0.87);
+  border-radius: 10px;
+  padding: 10px;
+  margin-top: 20px;
 }
 
 #welcome-message {

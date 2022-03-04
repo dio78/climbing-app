@@ -112,7 +112,7 @@ const CityInput = (props) => {
             <Row>
               <Col>
                 <InputGroup className="mb-2">
-                  <Button type="submit" disabled={startingWaypoint.length} variant="outline-secondary" onClick={ handleClickThis }>Current Location</Button>
+                  <Button type="submit" disabled={startingWaypoint.length} variant="secondary" onClick={ handleClickThis }>Current Location</Button>
                   <FormControl disabled={startingWaypoint.length} value={startInput} placeholder="Enter start location, use Current Location, or click the map" onChange={validateStart}></FormControl>
                 </InputGroup>
               </Col>
