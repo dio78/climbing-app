@@ -12,6 +12,7 @@ const defaultState =
 
 const routeDataReducer = (state = defaultState, action) => {
   if (action.type === ROUTE_INFO_RECEIVED) {
+    console.log(action.payload)
     return {...action.payload};
   }
   if (action.type === RESET) {
