@@ -48,7 +48,7 @@ const LeafletComponent = forwardRef((_, ref) => {
     const map = useMap();
 
     if (startingWaypoint.length > 0){
-      // map.flyTo(startingWaypoint, 14); 
+      map.flyTo(startingWaypoint, 14); 
       return startingWaypoint === null || endingWaypoint === null ? null : (
         <>
         <Marker position={startingWaypoint}>
@@ -84,7 +84,7 @@ const LeafletComponent = forwardRef((_, ref) => {
         let markerBounds = latLngBounds([]);
         markerBounds.extend(startingWaypoint);
         markerBounds.extend(endingWaypoint);
-        map.flyToBounds(markerBounds)
+        map.flyToBounds(markerBounds, {padding: [40, 40]})
       }
     }, [])
     console.log(geometry[geometry.length - 1])
