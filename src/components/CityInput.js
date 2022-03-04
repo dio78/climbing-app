@@ -73,6 +73,8 @@ const CityInput = (props) => {
     } else if (startInput && endInput) {
       setSearchStart(startInput);
       setSearchEnd(endInput);
+    } else if (!startInput && endInput) {
+      setSearchEnd(endInput);
     } else {
       alert('Enter a starting location, use current location, or click to set a starting point')
     }
@@ -100,7 +102,7 @@ const CityInput = (props) => {
     mapRef.map.flyTo([0, 0], 2, {
       animate: true,
       duration: 1.5
-});
+    });
   }
 
   return (
