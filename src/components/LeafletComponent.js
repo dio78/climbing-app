@@ -4,7 +4,7 @@ import '../Leaflet.css'
 import { latLngBounds } from 'leaflet';
 import { Col, Container, Row } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
-import { setWaypoint2, setMapInstance } from "../actions";
+import { setWaypoint2, setMapInstance, setWaypoint1 } from "../actions";
 import Information from "./Information";
 import L from 'leaflet'
 import { forwardRef} from "react";
@@ -33,6 +33,9 @@ const LeafletComponent = forwardRef((_, ref) => {
     useEffect(() => {
       if (position && startingWaypoint.length > 0) {
         dispatch(setWaypoint2([position.lat, position.lng]));
+      } 
+      if (position && startingWaypoint.length === 0) {
+        dispatch(setWaypoint1([position.lat, position.lng]));
       }
     }, [position]);
 

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Container, Row, Col, Form, InputGroup, FormControl, Button } from "react-bootstrap";
-import { getWayPoint1, getWayPoint2, getRouteData } from '../actions';
-import L from 'leaflet'
+import { getWayPoint1, getWayPoint2, getRouteData, setWaypoint1, setWaypoint2, resetRouteData } from '../actions';
+import L, {latLngBounds} from 'leaflet'
 
 const CityInput = (props) => {
   // useful map instance state
@@ -74,7 +74,7 @@ const CityInput = (props) => {
       setSearchStart(startInput);
       setSearchEnd(endInput);
     } else {
-      alert('Enter a starting location or use current location')
+      alert('Enter a starting location, use current location, or click to set a starting point')
     }
   }
 
@@ -89,22 +89,19 @@ const CityInput = (props) => {
     }
   }
 
-  // const selectStartingPoint = (e) => {
-  //   setStartInput(`${e.latlng.lat}, ${e.latlng.lng}`);
-  //   setSearchStart(`${e.latlng.lat}, ${e.latlng.lng}`);
-  // }
-
-
-  // const toggleFirstPointClickListener = () => {
-  //   if (mapRef) {
-  //     if (!searchStart) {
-  //       mapRef.map.on('click', selectStartingPoint);
-  //     } else {
-  //       mapRef.map.off('click');
-  //     }
-  //   }
-  //   return null;
-  // }
+  const resetHandler = (e) => {
+    dispatch(resetRouteData());
+    setStartInput('');
+    setEndInput('');
+    setSearchStart('');
+    setSearchEnd('');
+    dispatch(setWaypoint1([]));
+    dispatch(setWaypoint2([]));
+    mapRef.map.flyTo([0, 0], 2, {
+      animate: true,
+      duration: 1.5
+});
+  }
 
   return (
     <Container>
@@ -115,20 +112,20 @@ const CityInput = (props) => {
             <Row>
               <Col>
                 <InputGroup className="mb-2">
-                  <Button type="submit" variant="outline-secondary" onClick={ handleClickThis }>Current Location</Button>
-                  <FormControl value={startInput} placeholder="Enter start location, or click the map to set a start location" onChange={validateStart}></FormControl>
+                  <Button type="submit" disabled={startingWaypoint.length} variant="outline-secondary" onClick={ handleClickThis }>Current Location</Button>
+                  <FormControl disabled={startingWaypoint.length} value={startInput} placeholder="Enter start location, use Current Location, or click the map" onChange={validateStart}></FormControl>
                 </InputGroup>
               </Col>
             </Row>
-            {/* {toggleFirstPointClickListener()} */}
             <Row className="mb-2">
               <Col>
-                  <FormControl disabled={!searchStart} value={endInput} placeholder="Enter Destination Location, or click the map to set a destination" onChange={validateEnd}></FormControl>
+                  <FormControl disabled={!startingWaypoint.length} value={endInput} placeholder="Enter Destination Location, or click the map to set a destination" onChange={validateEnd}></FormControl>
               </Col>
             </Row>
             <Row className="mb-4">
               <Col className="align-items-center">
-                  <Button type="submit">Go</Button>
+                  <Button className="bt" type="submit" variant="success">Go</Button>
+                  <Button className="bt" type="button" variant="warning" onClick={resetHandler}>Reset Searches</Button>
               </Col>
             </Row>
           </Form>
