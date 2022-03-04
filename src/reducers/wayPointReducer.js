@@ -1,4 +1,4 @@
-import { WAYPOINT_1_RECEIVED, WAYPOINT_2_RECEIVED, WAYPOINT_2_SELECTED } from "../actions";
+import { WAYPOINT_1_RECEIVED, WAYPOINT_1_SELECTED, WAYPOINT_2_RECEIVED, WAYPOINT_2_SELECTED } from "../actions";
 
 const defaultState = {
   point1: [],
@@ -17,8 +17,8 @@ const wayPointReducer = (state = defaultState, action) => {
   if (action.type === WAYPOINT_2_SELECTED) {
     return {...state, point2: action.payload}
   }
-  if (action.type=== 'WAYPOINT_1_SELECTED') {
-    return {...state, point2: action.payload}
+  if (action.type=== WAYPOINT_1_SELECTED) {
+    return {...state, point1: action.payload}
   }
   return state;
 };

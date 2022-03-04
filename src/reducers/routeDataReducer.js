@@ -1,4 +1,4 @@
-import { ROUTE_INFO_RECEIVED } from "../actions";
+import { ROUTE_INFO_RECEIVED, RESET } from "../actions";
 
 const defaultState = 
   {
@@ -13,6 +13,9 @@ const defaultState =
 const routeDataReducer = (state = defaultState, action) => {
   if (action.type === ROUTE_INFO_RECEIVED) {
     return {...action.payload};
+  }
+  if (action.type === RESET) {
+    return defaultState;
   }
 
   return state;
