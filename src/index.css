@@ -32,6 +32,13 @@ code {
   margin-top: 20px;
 }
 
+.info-container {
+  background-color: rgba(237, 253, 243, 0.87);
+  border-radius: 10px;
+  padding: 10px;
+  margin-top: 20px;
+}
+
 #welcome-message {
   margin: 10px;
 }
