@@ -8,6 +8,11 @@ import { setWaypoint2, setMapInstance } from "../actions";
 import Information from "./Information";
 import L from 'leaflet'
 import { forwardRef} from "react";
+import { Line } from "react-chartjs-2";
+import { Chart, registerables } from 'chart.js';
+
+
+Chart.register(...registerables);
 
 const LeafletComponent = forwardRef((_, ref) => {
 
@@ -120,6 +125,111 @@ const LeafletComponent = forwardRef((_, ref) => {
     return null;
   }
 
+  function LineGraph () {
+    if(routeInfo.elevationData.length > 0) {
+      const labels = []
+      const data = []
+      routeInfo.elevationData.forEach((point) => {
+        labels.push(point[0])
+        data.push(point[1])
+      })
+
+      // Optimizing array size if two points are about the same
+      const labelsOptimized = [];
+      const dataOptimized = [];
+      const minDist = 5;
+      const minHeight = 2
+
+      console.log('labels:' + labels)
+      labels.forEach((distance, index) => {
+        if (index === 0 || index === labels.length - 1 || (distance - labelsOptimized[labelsOptimized.length - 1]) > minDist || Math.abs(data[index] - dataOptimized[dataOptimized.length - 1]) > minHeight) {
+          labelsOptimized.push(distance);
+          dataOptimized.push(data[index]);
+        }
+      });
+
+      const chartData = {
+        labels: labelsOptimized, // this is test data
+        datasets: [{
+          data: dataOptimized, // this is test data
+          fill: true,
+          borderColor: '#66ccff',
+          backgroundColor: '#66ccff66',
+          tension: 0.1,
+          pointRadius: 0,
+          spanGaps: false
+        }]
+      };
+      
+      const options = {
+        maintainAspectRation: false,
+        onHover: function (e,item) {
+          if(item.length > 0) {
+            console.log(item[0].element.$context.raw)
+          }
+          console.log(this.tooltip)
+        },
+        interaction: {
+          intersect: false,
+          mode: 'index',
+        },
+        plugins:{
+          legend:{display:false},
+          title: {
+            align: "end",
+            display: true,
+            text: "Distance, m / Elevation, m"
+          },
+          tooltip: {
+            displayColors: false,
+            callbacks: {
+              title: (tooltipItems) => {
+                return "Distance: " + tooltipItems[0].label + 'm'
+              },
+              label: (tooltipItem) => {
+                return "Elevation: " + tooltipItem.raw + 'm'
+              },
+            }
+          }
+        },
+        layout:{padding:{bottom:0}},
+        scales: {
+          y:{
+            type: 'linear',
+            min: 0,
+            ticks:{
+              color:"black",
+              font:{
+                size:18
+              }
+            },
+            grid:{
+              
+              beginAtZero: true
+            }
+          },
+          x:{
+            type: 'linear',
+            max: chartData.labels[chartData.labels.length - 1],
+            ticks:{
+              color:"black",
+              font:{
+                size:18
+              }
+            },
+          }
+        },
+      };
+      console.log(routeInfo)
+      return (
+        <Line options={options} data={chartData} />
+      )
+    }
+
+    return null
+    
+  }
+
   return (
     <Container className="mb-4">
       <Row>
@@ -141,7 +251,12 @@ const LeafletComponent = forwardRef((_, ref) => {
             {/* <CurrentMarker /> */}
           </MapContainer>
         </Col>
+        <Col xs={{span: 10, offset: 1}}>
+          <LineGraph />
+        </Col>
+        
       </Row>
+      
       {renderInfo()}
     </Container>
   )
